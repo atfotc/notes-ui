@@ -1,0 +1,11 @@
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "browserslist": "> 0.25%, not dead"
+            }
+        ]
+    ],
+    "plugins": ["@babel/plugin-proposal-class-properties"]
+}
