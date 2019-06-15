@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from "react"
-import { Context } from "app/data/context"
-import { history } from "app/data/history"
+import { Context, history } from "app/state"
 import { uuid } from "app/helpers"
 import dayjs from "dayjs"
 

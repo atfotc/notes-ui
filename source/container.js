@@ -1,10 +1,8 @@
 import React from "react"
-import { Router, Redirect, Route } from "react-router-dom"
+import { Redirect, Route, Router, Switch } from "react-router-dom"
 import { Menu } from "app/components"
-import { ShowNotes, CreateNote, EditNote } from "app/pages"
-import { load, save } from "app/data/storage"
-import { Context, initial } from "app/data/context"
-import { history } from "app/data/history"
+import { CreateNote, EditNote, Missing, ShowNotes } from "app/pages"
+import { Context, history, initial, load, save } from "app/state"
 import { useEffectOnce, useStateWithEffect } from "app/helpers"
 
 const Container = () => {
@@ -22,10 +20,13 @@ const Container = () => {
             <Context.Provider value={{ state, setState, setSavedState }}>
                 <Router history={history}>
                     <Menu />
-                    <Route path="/notes" exact component={ShowNotes} />
-                    <Route path="/notes/create" component={CreateNote} />
-                    <Route path="/notes/:note/edit" component={EditNote} />
-                    <Redirect from="/" to="/notes" />
+                    <Switch>
+                        <Route path="/notes/create" component={CreateNote} />
+                        <Route path="/notes/:note/edit" component={EditNote} />
+                        <Route path="/notes" exact component={ShowNotes} />
+                        <Route component={Missing} />
+                        <Redirect from="/" to="/notes" />
+                    </Switch>
                 </Router>
             </Context.Provider>
         </div>

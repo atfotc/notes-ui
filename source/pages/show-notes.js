@@ -1,6 +1,6 @@
 import React, { useContext } from "react"
 import { Link } from "react-router-dom"
-import { Context } from "app/data/context"
+import { Context } from "app/state"
 
 const ShowNotes = () => {
     const { state, setSavedState } = useContext(Context)
