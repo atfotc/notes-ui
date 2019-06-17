@@ -6,10 +6,12 @@
         "clean": "npm run clean:build && npm run clean:cache",
         "clean:build": "rm -rf .build",
         "clean:cache": "rm -rf .cache",
-        "start": "NODE_ENV=development && parcel index.html --cache-dir .cache --out-dir .build --target browser"
+        "start": "NODE_ENV=development && node server.js"
     },
     "dependencies": {
+        "compression": "^1.7.4",
         "dayjs": "^1.8.14",
+        "express": "^4.17.1",
         "history": "^4.9.0",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
