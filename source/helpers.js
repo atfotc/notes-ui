@@ -40,3 +40,130 @@ export const getStorage = () => {
 
     return archive
 }
+
+export const reorderBlocks = blocks => {
+    blocks = blocks.sort((a, b) => a.order - b.order)
+
+    for (let i = 0; i < blocks.length; i++) {
+        blocks[i].order = i
+    }
+
+    return blocks
+}
+
+export const moveBlockUp = (setSavedState, note, block) => {
+    setSavedState(state => ({
+        notes: [
+            ...state.notes.filter(next => next.id !== note.id),
+            {
+                ...note,
+                blocks: reorderBlocks([
+                    ...note.blocks
+                        .filter(next => next.id !== block.id)
+                        .map(next => {
+                            if (next.order >= block.order - 1) {
+                                next.order++
+                            }
+
+                            return next
+                        }),
+                    {
+                        ...block,
+                        order: block.order - 1,
+                    },
+                ]),
+            },
+        ],
+    }))
+}
+
+export const moveBlockDown = (setSavedState, note, block) => {
+    setSavedState(state => ({
+        notes: [
+            ...state.notes.filter(next => next.id !== note.id),
+            {
+                ...note,
+                blocks: reorderBlocks([
+                    ...note.blocks
+                        .filter(next => next.id !== block.id)
+                        .map(next => {
+                            if (next.order === block.order + 1) {
+                                next.order--
+                            }
+
+                            return next
+                        }),
+                    {
+                        ...block,
+                        order: block.order + 1,
+                    },
+                ]),
+            },
+        ],
+    }))
+}
+
+export const removeBlock = (setSavedState, note, block) => {
+    if (!confirm("are you sure?")) {
+        return
+    }
+
+    setSavedState(state => ({
+        notes: [
+            ...state.notes.filter(next => next.id !== note.id),
+            {
+                ...note,
+                blocks: reorderBlocks([...note.blocks.filter(next => next.id !== block.id)]),
+            },
+        ],
+    }))
+}
+
+export const addBlock = (setState, setSavedState, note, type, order) => {
+    if (!type) {
+        setState(state => ({ ...state, isAddingBlock: order }))
+        return
+    }
+
+    const id = uuid()
+
+    setSavedState(state => ({
+        isAddingBlock: undefined,
+        notes: [
+            ...state.notes.filter(next => next.id !== note.id),
+            {
+                ...note,
+                blocks: reorderBlocks([
+                    ...note.blocks.map(note => {
+                        if (note.order >= order) {
+                            note.order++
+                        }
+
+                        return note
+                    }),
+                    { id, type, order },
+                ]),
+            },
+        ],
+    }))
+}
+
+export const changeBlock = (setSavedState, note, block, data) => {
+    if (block.type === "text") {
+        setSavedState(state => ({
+            notes: [
+                ...state.notes.filter(next => next.id !== note.id),
+                {
+                    ...note,
+                    blocks: [
+                        ...note.blocks.filter(next => next.id !== block.id),
+                        {
+                            ...block,
+                            ...data,
+                        },
+                    ],
+                },
+            ],
+        }))
+    }
+}
