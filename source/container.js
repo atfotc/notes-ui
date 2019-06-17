@@ -24,8 +24,8 @@ const Container = () => {
                         <Route path="/notes/create" component={CreateNote} />
                         <Route path="/notes/:note/edit" component={EditNote} />
                         <Route path="/notes" exact component={ShowNotes} />
-                        <Route component={Missing} />
                         <Redirect from="/" to="/notes" />
+                        <Route component={Missing} />
                     </Switch>
                 </Router>
             </Context.Provider>

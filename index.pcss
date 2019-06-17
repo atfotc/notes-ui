@@ -14,7 +14,23 @@ textarea {
     resize: none;
 }
 
+.print {
+    .hebrew {
+        font-family: "Noto Serif Hebrew", serif;
+        font-weight: 600;
+    }
+
+    * + * {
+        margin-top: 1rem;
+    }
+}
+
 @responsive {
+    .font-noto-serif {
+        font-family: "Noto Serif", serif;
+        font-weight: 300;
+    }
+
     .rotate-45 {
         transform: rotate(45deg);
     }

@@ -23,10 +23,19 @@ const ShowNotes = () => {
                                         notes: state.notes.filter(next => next.id !== note.id),
                                     }))
                             }}
-                            className="text-blue-500 text-sm"
+                            className="text-blue-500 text-sm mr-2 font-noto-serif"
                         >
                             delete
                         </button>
+                        <a
+                            href={`/api/notes/${note.id}/download-pdf?data=${btoa(
+                                encodeURIComponent(JSON.stringify(note)),
+                            )}`}
+                            target="_blank"
+                            className="text-sm text-blue-500"
+                        >
+                            download pdf
+                        </a>
                     </div>
                 </div>
             ))}

@@ -17,7 +17,8 @@
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.0.1",
         "showdown": "^1.9.0",
-        "source": "0.0.3"
+        "source": "0.0.3",
+        "wkhtmltopdf": "^0.3.4"
     },
     "devDependencies": {
         "@babel/core": "^7.4.5",
