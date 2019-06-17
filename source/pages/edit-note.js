@@ -1,14 +1,20 @@
 import React, { Fragment, useContext, useRef } from "react"
 import { Context, history } from "app/state"
 import { TextBlock } from "app/components"
-import { moveBlockUp, moveBlockDown, removeBlock, addBlock, changeBlock } from "app/helpers"
+import { addBlock, changeBlock, moveBlockDown, moveBlockUp, removeBlock } from "app/helpers"
 
-const AddBlock = ({ setState, setSavedState, note, isAddingBlock, order }) => {
+const AddBlock = ({ onAddBlock, onCancelAddBlock, setSavedState, note, isAddingBlock, order }) => {
     if (isAddingBlock === order) {
         return (
             <div>
                 <button
-                    onClick={() => addBlock(setState, setSavedState, note, "text", order)}
+                    onClick={() => onCancelAddBlock()}
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 mr-1 text-xs"
+                >
+                    <span className="inline-flex relative rotate-45">+</span>
+                </button>
+                <button
+                    onClick={() => addBlock(setSavedState, note, "text", order)}
                     className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs"
                 >
                     text
@@ -18,10 +24,7 @@ const AddBlock = ({ setState, setSavedState, note, isAddingBlock, order }) => {
     }
 
     return (
-        <button
-            onClick={() => addBlock(setState, setSavedState, note, undefined, order)}
-            className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs"
-        >
+        <button onClick={() => onAddBlock(order)} className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs">
             +
         </button>
     )
@@ -60,6 +63,14 @@ const EditNote = ({ match }) => {
         }))
     }
 
+    const onAddBlock = order => {
+        setState(state => ({ ...state, isAddingBlock: order }))
+    }
+
+    const onCancelAddBlock = order => {
+        setState(state => ({ ...state, isAddingBlock: undefined }))
+    }
+
     return (
         <form onSubmit={onSubmit}>
             <div className="flex flex-col items-start w-full pb-4">
@@ -76,7 +87,7 @@ const EditNote = ({ match }) => {
                                 {block.type === "text" && (
                                     <TextBlock
                                         id={block.id}
-                                        defaultValue={block.value}
+                                        defaultValue={(block.value || "").trim()}
                                         onChange={({ nativeEvent }) =>
                                             changeBlock(setSavedState, note, block, { value: nativeEvent.target.value })
                                         }
@@ -103,13 +114,15 @@ const EditNote = ({ match }) => {
                                     </button>
                                 </div>
                                 <AddBlock
-                                    {...{ setSavedState, setState, note, isAddingBlock }}
+                                    {...{ onAddBlock, onCancelAddBlock, setSavedState, note, isAddingBlock }}
                                     order={block.order + 1}
                                 />
                             </div>
                         </Fragment>
                     ))}
-                {!note.blocks.length && <AddBlock {...{ setSavedState, setState, note, isAddingBlock }} order={1} />}
+                {!note.blocks.length && (
+                    <AddBlock {...{ onAddBlock, onCancelAddBlock, setSavedState, note, isAddingBlock }} order={1} />
+                )}
             </div>
             <input type="submit" value="Update" className="bg-gray-100 text-gray-900 py-1 px-2" />
         </form>

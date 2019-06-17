@@ -29,7 +29,7 @@ const Container = () => {
                     </Switch>
                 </Router>
             </Context.Provider>
-            <pre className="w-full mt-8 text-xs text-gray-500">{JSON.stringify(state, undefined, 4)}</pre>
+            {/* <pre className="w-full mt-8 text-xs text-gray-500">{JSON.stringify(state, undefined, 4)}</pre> */}
             {/* <pre className="w-full mt-8 text-xs text-gray-500">{JSON.stringify(getStorage(), undefined, 4)}</pre> */}
         </div>
     )

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export const useEffectOnce = effect => {
     useEffect(effect, [])
@@ -18,6 +18,27 @@ export const useStateWithEffect = (initial, effect) => {
     }
 
     return [state, setState, setStateWithEffect]
+}
+
+// https://overreacted.io/making-setinterval-declarative-with-react-hooks ↓
+
+export const useInterval = (callback, delay) => {
+    const savedCallback = useRef()
+
+    useEffect(() => {
+        savedCallback.current = callback
+    }, [callback])
+
+    useEffect(() => {
+        function tick() {
+            savedCallback.current()
+        }
+
+        if (delay !== null) {
+            let id = setInterval(tick, delay)
+            return () => clearInterval(id)
+        }
+    }, [delay])
 }
 
 // https://stackoverflow.com/a/2117523 ↓
@@ -119,12 +140,7 @@ export const removeBlock = (setSavedState, note, block) => {
     }))
 }
 
-export const addBlock = (setState, setSavedState, note, type, order) => {
-    if (!type) {
-        setState(state => ({ ...state, isAddingBlock: order }))
-        return
-    }
-
+export const addBlock = (setSavedState, note, type, order) => {
     const id = uuid()
 
     setSavedState(state => ({
