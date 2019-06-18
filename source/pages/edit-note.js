@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useRef } from "react"
 import { Context, history } from "app/state"
-import { Container, Menu, TextBlock } from "app/components"
+import { Container, HeadingOneBlock, HeadingTwoBlock, Menu, TextBlock, WordBlock } from "app/components"
 import { addBlock, changeBlock, moveBlockDown, moveBlockUp, removeBlock } from "app/helpers"
 
 const AddBlock = ({ onAddBlock, onCancelAddBlock, setSavedState, note, isAddingBlock, order }) => {
@@ -9,15 +9,33 @@ const AddBlock = ({ onAddBlock, onCancelAddBlock, setSavedState, note, isAddingB
             <div>
                 <button
                     onClick={() => onCancelAddBlock()}
-                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 mr-1 text-xs"
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs mr-1"
                 >
                     <span className="inline-flex relative rotate-45">+</span>
                 </button>
                 <button
+                    onClick={() => addBlock(setSavedState, note, "heading-one", order)}
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs mr-1"
+                >
+                    heading 1
+                </button>
+                <button
+                    onClick={() => addBlock(setSavedState, note, "heading-two", order)}
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs mr-1"
+                >
+                    heading 2
+                </button>
+                <button
                     onClick={() => addBlock(setSavedState, note, "text", order)}
-                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs"
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs mr-1"
                 >
                     text
+                </button>
+                <button
+                    onClick={() => addBlock(setSavedState, note, "word", order)}
+                    className="bg-gray-100 text-gray-900 py-1 px-2 mt-2 text-xs"
+                >
+                    word
                 </button>
             </div>
         )
@@ -86,6 +104,28 @@ const EditNote = ({ match }) => {
                         .map(block => (
                             <Fragment key={block.id}>
                                 <div className="group relative w-full flex flex-col items-start mb-4">
+                                    {block.type === "heading-one" && (
+                                        <HeadingOneBlock
+                                            id={block.id}
+                                            defaultValue={(block.value || "").trim()}
+                                            onChange={({ nativeEvent }) =>
+                                                changeBlock(setSavedState, note, block, {
+                                                    value: nativeEvent.target.value,
+                                                })
+                                            }
+                                        />
+                                    )}
+                                    {block.type === "heading-two" && (
+                                        <HeadingTwoBlock
+                                            id={block.id}
+                                            defaultValue={(block.value || "").trim()}
+                                            onChange={({ nativeEvent }) =>
+                                                changeBlock(setSavedState, note, block, {
+                                                    value: nativeEvent.target.value,
+                                                })
+                                            }
+                                        />
+                                    )}
                                     {block.type === "text" && (
                                         <TextBlock
                                             id={block.id}
@@ -93,6 +133,18 @@ const EditNote = ({ match }) => {
                                             onChange={({ nativeEvent }) =>
                                                 changeBlock(setSavedState, note, block, {
                                                     value: nativeEvent.target.value,
+                                                })
+                                            }
+                                        />
+                                    )}
+                                    {block.type === "word" && (
+                                        <WordBlock
+                                            id={block.id}
+                                            letters={state.letters}
+                                            defaultLetters={block.letters || []}
+                                            onChangeLetters={letters =>
+                                                changeBlock(setSavedState, note, block, {
+                                                    letters,
                                                 })
                                             }
                                         />

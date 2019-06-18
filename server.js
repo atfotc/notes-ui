@@ -23,7 +23,7 @@ const bundle = async () => {
         scopeHoist: false,
         target: "browser",
         logLevel: 3,
-        hmr: false,
+        hmr: true,
         sourceMaps: true,
         detailedReport: true,
     })
@@ -58,7 +58,7 @@ app.get("/api/notes/:note/download-pdf", async (request, response) => {
 
     await page.goto(`${from}/notes/${note}/preview`, { waitUntil: "networkidle0" })
 
-    await page.evaluate(note => {
+    await page.evaluate(() => {
         const wait = async ms => {
             await new Promise(resolve => setTimeout(resolve, ms))
         }
@@ -66,7 +66,41 @@ app.get("/api/notes/:note/download-pdf", async (request, response) => {
         wait(250)
     }, data)
 
-    const buffer = await page.pdf({ format: "A4" })
+    const rules = await page.evaluate(() => {
+        let rules = []
+
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            for (let j = 0; j < document.styleSheets[i].cssRules.length; j++) {
+                rules.push(document.styleSheets[i].cssRules[j].cssText)
+            }
+        }
+
+        return rules
+    })
+
+    const templates = {
+        headerTemplate: `
+            <style>${rules.join("\n")}</style>
+            <div class="block w-full font-noto-serif text-center text-gray-800" style="font-size: 8pt; "></div>
+        `,
+        footerTemplate: `
+            <style>${rules.join("\n")}</style>
+            <div class="block w-full font-noto-serif text-center text-gray-800" style="font-size: 8pt; margin-bottom: 16pt"><span class="pageNumber"></span></div>
+        `,
+    }
+
+    const buffer = await page.pdf({
+        format: "A4",
+        ...templates,
+        displayHeaderFooter: true,
+        printBackground: true,
+        margin: {
+            top: "2.5cm",
+            right: "3.0cm",
+            bottom: "2.5cm",
+            left: "3.0cm",
+        },
+    })
 
     response.type("application/pdf")
     response.send(buffer)
@@ -86,7 +120,7 @@ app.get("/footer", (_, response) => {
     response.sendFile(Path.join(__dirname, ".build", "footer.html"))
 })
 
-app.get(["/", "/notes", "/notes/*"], (_, response) => {
+app.get(["/", "/notes", "/notes/*", "/letters", "/letters/*"], (_, response) => {
     response.sendFile(Path.join(__dirname, ".build", "index.html"))
 })
 

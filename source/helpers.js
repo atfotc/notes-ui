@@ -74,6 +74,7 @@ export const reorderBlocks = blocks => {
 
 export const moveBlockUp = (setSavedState, note, block) => {
     setSavedState(state => ({
+        ...state,
         notes: [
             ...state.notes.filter(next => next.id !== note.id),
             {
@@ -100,6 +101,7 @@ export const moveBlockUp = (setSavedState, note, block) => {
 
 export const moveBlockDown = (setSavedState, note, block) => {
     setSavedState(state => ({
+        ...state,
         notes: [
             ...state.notes.filter(next => next.id !== note.id),
             {
@@ -130,6 +132,7 @@ export const removeBlock = (setSavedState, note, block) => {
     }
 
     setSavedState(state => ({
+        ...state,
         notes: [
             ...state.notes.filter(next => next.id !== note.id),
             {
@@ -144,7 +147,7 @@ export const addBlock = (setSavedState, note, type, order) => {
     const id = uuid()
 
     setSavedState(state => ({
-        isAddingBlock: undefined,
+        ...state,
         notes: [
             ...state.notes.filter(next => next.id !== note.id),
             {
@@ -161,12 +164,33 @@ export const addBlock = (setSavedState, note, type, order) => {
                 ]),
             },
         ],
+        isAddingBlock: undefined,
     }))
 }
 
 export const changeBlock = (setSavedState, note, block, data) => {
-    if (block.type === "text") {
+    if (block.type === "text" || block.type === "heading-one" || block.type === "heading-two") {
         setSavedState(state => ({
+            ...state,
+            notes: [
+                ...state.notes.filter(next => next.id !== note.id),
+                {
+                    ...note,
+                    blocks: [
+                        ...note.blocks.filter(next => next.id !== block.id),
+                        {
+                            ...block,
+                            ...data,
+                        },
+                    ],
+                },
+            ],
+        }))
+    }
+
+    if (block.type === "word") {
+        setSavedState(state => ({
+            ...state,
             notes: [
                 ...state.notes.filter(next => next.id !== note.id),
                 {

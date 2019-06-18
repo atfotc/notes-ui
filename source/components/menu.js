@@ -6,8 +6,14 @@ const Menu = () => (
         <Link to="/notes" className="underline mr-2">
             Show Notes
         </Link>
-        <Link to="/notes/create" className="underline">
+        <Link to="/notes/create" className="underline mr-2">
             Create Note
+        </Link>
+        <Link to="/letters" className="underline mr-2">
+            Show Letters
+        </Link>
+        <Link to="/letters/create" className="underline">
+            Create Letter
         </Link>
     </nav>
 )

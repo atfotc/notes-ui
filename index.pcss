@@ -23,17 +23,59 @@ textarea {
     resize: none;
 }
 
-@page {
-    margin: 2.5cm 3cm;
-}
-
 .print {
     .hebrew {
         font-weight: 600;
     }
 
-    * + * {
+    .strongs {
+        @apply text-blue-500;
+        @apply underline;
+    }
+
+    * + h2,
+    * + h3,
+    * + p,
+    * + .word {
         margin-top: 1rem;
+    }
+}
+
+ul {
+    @apply my-3;
+    @apply mx-6;
+    @apply list-disc;
+}
+
+.bg-word {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+
+.heading-one {
+    @apply flex;
+    @apply w-full;
+    @apply items-center;
+
+    &::before {
+        @apply absolute;
+        @apply text-xs;
+        @apply text-gray-500;
+        @apply -ml-8;
+        content: "h1";
+    }
+}
+
+.heading-two {
+    @apply flex;
+    @apply w-full;
+    @apply items-center;
+
+    &::before {
+        @apply absolute;
+        @apply text-xs;
+        @apply text-gray-500;
+        @apply -ml-8;
+        content: "h2";
     }
 }
 

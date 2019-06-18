@@ -13,6 +13,17 @@ const ShowNotes = () => {
     }
 
     const onClickPreview = async note => {
+        for (let i = 0; i < note.blocks.length; i++) {
+            if (note.blocks[i].type === "word") {
+                for (let j = 0; j < note.blocks[i].letters.length; j++) {
+                    note.blocks[i].letters[j] = {
+                        ...note.blocks[i].letters[j],
+                        ...state.letters.find(next => next.id === note.blocks[i].letters[j].id),
+                    }
+                }
+            }
+        }
+
         await fetch(`/api/notes/${note.id}/store`, {
             method: "POST",
             headers: {
