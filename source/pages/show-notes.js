@@ -3,6 +3,28 @@ import { Link } from "react-router-dom"
 import { Context } from "app/state"
 import { Container, Menu } from "app/components"
 
+const storeNote = async (state, note) => {
+    for (let i = 0; i < note.blocks.length; i++) {
+        if (note.blocks[i].type === "word") {
+            for (let j = 0; j < note.blocks[i].letters.length; j++) {
+                note.blocks[i].letters[j] = {
+                    ...note.blocks[i].letters[j],
+                    ...state.letters.find(next => next.id === note.blocks[i].letters[j].id),
+                }
+            }
+        }
+    }
+
+    await fetch(`/api/notes/${note.id}/store`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(note),
+    })
+}
+
 const ShowNotes = () => {
     const { state, setSavedState } = useContext(Context)
 
@@ -12,28 +34,19 @@ const ShowNotes = () => {
         from += `:${location.port}`
     }
 
-    const onClickPreview = async note => {
-        for (let i = 0; i < note.blocks.length; i++) {
-            if (note.blocks[i].type === "word") {
-                for (let j = 0; j < note.blocks[i].letters.length; j++) {
-                    note.blocks[i].letters[j] = {
-                        ...note.blocks[i].letters[j],
-                        ...state.letters.find(next => next.id === note.blocks[i].letters[j].id),
-                    }
-                }
-            }
-        }
-
-        await fetch(`/api/notes/${note.id}/store`, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(note),
-        })
-
+    const onClickDownloadPdf = async note => {
+        await storeNote(state, note)
         window.open(`/api/notes/${note.id}/download-pdf?from=${encodeURIComponent(from)}`, "_blank")
+    }
+
+    const onClickDeployPdf = async note => {
+        await storeNote(state, note)
+        window.open(`/api/notes/${note.id}/deploy-pdf?from=${encodeURIComponent(from)}`, "_blank")
+    }
+
+    const onClickDeployHtml = async note => {
+        await storeNote(state, note)
+        window.open(`/api/notes/${note.id}/deploy-html?from=${encodeURIComponent(from)}`, "_blank")
     }
 
     return (
@@ -60,8 +73,14 @@ const ShowNotes = () => {
                             >
                                 delete
                             </button>
-                            <button onClick={() => onClickPreview(note)} className="text-sm text-blue-500">
-                                download
+                            <button onClick={() => onClickDownloadPdf(note)} className="text-sm text-blue-500 mr-2">
+                                download pdf
+                            </button>
+                            <button onClick={() => onClickDeployPdf(note)} className="text-sm text-blue-500 mr-2">
+                                deploy pdf
+                            </button>
+                            <button onClick={() => onClickDeployHtml(note)} className="text-sm text-blue-500">
+                                deploy html
                             </button>
                         </div>
                     </div>
