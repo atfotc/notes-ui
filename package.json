@@ -9,16 +9,18 @@
         "start": "NODE_ENV=development && node server.js"
     },
     "dependencies": {
+        "body-parser": "^1.19.0",
         "compression": "^1.7.4",
+        "core-js": "^2.6.9",
         "dayjs": "^1.8.14",
         "express": "^4.17.1",
         "history": "^4.9.0",
+        "puppeteer": "^1.17.0",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.0.1",
-        "showdown": "^1.9.0",
-        "source": "0.0.3",
-        "wkhtmltopdf": "^0.3.4"
+        "regenerator-runtime": "^0.13.2",
+        "showdown": "^1.9.0"
     },
     "devDependencies": {
         "@babel/core": "^7.4.5",

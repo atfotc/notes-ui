@@ -1,7 +1,6 @@
-import React from "react"
+import React, { Fragment } from "react"
 import { Redirect, Route, Router, Switch } from "react-router-dom"
-import { Menu } from "app/components"
-import { CreateNote, EditNote, Missing, ShowNotes } from "app/pages"
+import { CreateNote, EditNote, Missing, PreviewNote, ShowNotes } from "app/pages"
 import { Context, history, initial, load, save } from "app/state"
 import { useEffectOnce, useStateWithEffect, getStorage } from "app/helpers"
 
@@ -16,13 +15,13 @@ const Container = () => {
     })
 
     return (
-        <div className="container mx-auto p-4">
+        <Fragment>
             <Context.Provider value={{ state, setState, setSavedState }}>
                 <Router history={history}>
-                    <Menu />
                     <Switch>
                         <Route path="/notes/create" component={CreateNote} />
                         <Route path="/notes/:note/edit" component={EditNote} />
+                        <Route path="/notes/:note/preview" component={PreviewNote} />
                         <Route path="/notes" exact component={ShowNotes} />
                         <Redirect from="/" to="/notes" />
                         <Route component={Missing} />
@@ -31,7 +30,7 @@ const Container = () => {
             </Context.Provider>
             {/* <pre className="w-full mt-8 text-xs text-gray-500">{JSON.stringify(state, undefined, 4)}</pre> */}
             {/* <pre className="w-full mt-8 text-xs text-gray-500">{JSON.stringify(getStorage(), undefined, 4)}</pre> */}
-        </div>
+        </Fragment>
     )
 }
 
