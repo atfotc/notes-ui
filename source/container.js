@@ -2,7 +2,18 @@ import React, { Fragment } from "react"
 import { Redirect, Route, Router, Switch } from "react-router-dom"
 import { Context, history, initial, load, save } from "app/state"
 import { useEffectOnce, useStateWithEffect, getStorage } from "app/helpers"
-import { CreateNote, CreateLetter, EditNote, EditLetter, Missing, PreviewNote, ShowNotes, ShowLetters } from "app/pages"
+
+import {
+    CreateNote,
+    CreateLetter,
+    EditNote,
+    EditLetter,
+    Missing,
+    PreviewNote,
+    Settings,
+    ShowNotes,
+    ShowLetters,
+} from "app/pages"
 
 const Container = () => {
     const [state, setState, setSavedState] = useStateWithEffect(initial, state => {
@@ -25,10 +36,11 @@ const Container = () => {
                         <Route path="/notes/create" component={CreateNote} />
                         <Route path="/notes/:note/edit" component={EditNote} />
                         <Route path="/notes/:note/preview" component={PreviewNote} />
-                        <Route path="/notes" exact component={ShowNotes} />
+                        <Route path="/notes" component={ShowNotes} />
                         <Route path="/letters/create" component={CreateLetter} />
                         <Route path="/letters/:letter/edit" component={EditLetter} />
-                        <Route path="/letters" exact component={ShowLetters} />
+                        <Route path="/letters" component={ShowLetters} />
+                        <Route path="/settings" component={Settings} />
                         <Redirect from="/" to="/notes" />
                         <Route component={Missing} />
                     </Switch>

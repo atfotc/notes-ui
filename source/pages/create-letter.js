@@ -40,7 +40,7 @@ const CreateLetter = () => {
                     <label className="flex w-full font-light text-sm text-gray-500">Title</label>
                     <input
                         ref={title}
-                        defaultValue={`New Pictograph on ${dayjs().format("YYYY/MM/DD")}`}
+                        defaultValue={`New Letter on ${dayjs().format("YYYY/MM/DD")}`}
                         className="flex w-full border-b-2 border-gray-100"
                     />
                 </div>

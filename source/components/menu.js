@@ -12,8 +12,11 @@ const Menu = () => (
         <Link to="/letters" className="underline mr-2">
             Show Letters
         </Link>
-        <Link to="/letters/create" className="underline">
+        <Link to="/letters/create" className="underline mr-2">
             Create Letter
+        </Link>
+        <Link to="/settings" className="underline">
+            Settings
         </Link>
     </nav>
 )

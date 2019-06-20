@@ -80,7 +80,7 @@ app.get("/footer", (_, response) => {
     response.sendFile(path.join(__dirname, ".build", "footer.html"))
 })
 
-app.get(["/", "/notes", "/notes/*", "/letters", "/letters/*"], (_, response) => {
+app.get(["/", "/notes", "/notes/*", "/letters", "/letters/*", "/settings"], (_, response) => {
     response.sendFile(path.join(__dirname, ".build", "index.html"))
 })
 
